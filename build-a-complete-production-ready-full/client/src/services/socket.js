@@ -3,8 +3,11 @@ import { io } from "socket.io-client";
 let socket;
 
 export const connectSocket = (userId) => {
+  const socketUrl = import.meta.env.VITE_SOCKET_URL;
+  if (!socketUrl) return null;
+
   if (!socket) {
-    socket = io(import.meta.env.VITE_SOCKET_URL || "http://localhost:5000", {
+    socket = io(socketUrl, {
       withCredentials: true,
       autoConnect: false
     });

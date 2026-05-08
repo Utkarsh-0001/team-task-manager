@@ -5,8 +5,11 @@ import { generateToken } from "../utils/generateToken.js";
 
 const cookieOptions = {
   httpOnly: true,
-  sameSite: "strict",
-  secure: process.env.COOKIE_SECURE === "true",
+  sameSite:
+    process.env.COOKIE_SAME_SITE ||
+    (process.env.NODE_ENV === "production" ? "none" : "lax"),
+  secure:
+    process.env.COOKIE_SECURE === "true" || process.env.NODE_ENV === "production",
   maxAge: 7 * 24 * 60 * 60 * 1000
 };
 
