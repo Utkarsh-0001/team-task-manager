@@ -13,6 +13,7 @@ import authRoutes from "./routes/authRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
 import projectRoutes from "./routes/projectRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
+import { getAllowedOrigins } from "./config/env.js";
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
 
 const app = express();
@@ -33,13 +34,18 @@ app.use(cookieParser());
 app.use(mongoSanitize());
 app.use(hpp());
 
-const clientUrls = (process.env.CLIENT_URL || "http://localhost:5173")
-  .split(",")
-  .map((url) => url.trim());
+const allowedOrigins = getAllowedOrigins();
 
 app.use(
   cors({
-    origin: clientUrls,
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error(`CORS blocked origin: ${origin}`));
+    },
+    optionsSuccessStatus: 200,
     credentials: true
   })
 );
@@ -68,4 +74,3 @@ app.use(notFound);
 app.use(errorHandler);
 
 export default app;
-

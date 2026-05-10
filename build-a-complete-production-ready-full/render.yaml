@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: team-task-manager-backend
+    runtime: node
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CLIENT_URL
+        value: https://team-task-manager-seven-rho.vercel.app
+      - key: FRONTEND_URL
+        value: https://team-task-manager-seven-rho.vercel.app
+      - key: CORS_ORIGIN
+        value: https://team-task-manager-seven-rho.vercel.app
+      - key: COOKIE_SAME_SITE
+        value: none
+      - key: COOKIE_SECURE
+        value: "true"
+      - key: ENABLE_SOCKET_IO
+        value: "false"
+      - key: JWT_SECRET
+        sync: false
+      - key: MONGO_URI
+        sync: false

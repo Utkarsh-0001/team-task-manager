@@ -19,10 +19,9 @@ export const sendMail = async ({ to, subject, html }) => {
   if (!transport) return { skipped: true };
 
   return transport.sendMail({
-    from: process.env.SMTP_FROM || "Team Task Manager <no-reply@example.com>",
+    from: process.env.SMTP_FROM || "Team Task Manager <no-reply@teamtaskmanager.app>",
     to,
     subject,
     html
   });
 };
-

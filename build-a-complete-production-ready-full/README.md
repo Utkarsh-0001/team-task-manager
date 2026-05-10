@@ -14,7 +14,7 @@ A production-ready full-stack task and project workspace inspired by Jira, Trell
 - Email notification service via SMTP settings.
 - File attachments via multipart upload.
 - MongoDB models for User, Project, Task, Activity, and Notification.
-- Railway backend config and Vercel frontend config.
+- Render backend config and Vercel frontend config.
 
 ## Tech Stack
 
@@ -69,15 +69,21 @@ PORT=5000
 MONGO_URI=mongodb+srv://<user>:<password>@<cluster>.mongodb.net/team-task-manager
 JWT_SECRET=replace-with-a-long-random-secret
 JWT_EXPIRES_IN=7d
-CLIENT_URL=http://localhost:5173
+CLIENT_URL=https://team-task-manager-seven-rho.vercel.app
+FRONTEND_URL=https://team-task-manager-seven-rho.vercel.app
+CORS_ORIGIN=https://team-task-manager-seven-rho.vercel.app
+COOKIE_SAME_SITE=none
+COOKIE_SECURE=true
+ENABLE_SOCKET_IO=false
 COOKIE_SECURE=false
 ```
 
 4. Set `client/.env`:
 
 ```env
-VITE_API_URL=http://localhost:5000/api
-VITE_SOCKET_URL=http://localhost:5000
+VITE_API_URL=https://team-task-manager-34f2.onrender.com/api
+VITE_SOCKET_URL=https://team-task-manager-34f2.onrender.com
+VITE_ENABLE_SOCKET_IO=false
 ```
 
 5. Seed demo data:
@@ -92,8 +98,8 @@ npm run seed
 npm run dev
 ```
 
-Frontend: `http://localhost:5173`  
-Backend health: `http://localhost:5000/health`
+Frontend dev URL is printed by Vite after startup.  
+Backend health endpoint is `/health` on the configured API host.
 
 ## Demo Credentials
 
@@ -121,17 +127,17 @@ See [docs/API.md](docs/API.md).
 
 1. Create an Atlas cluster.
 2. Create a database user.
-3. Allow Railway outbound access. For quick demos, Atlas can allow `0.0.0.0/0`; for production, restrict network access where possible.
+3. Allow Render outbound access. For quick demos, Atlas can allow broad network access; for production, restrict network access where possible.
 4. Copy the connection string into `MONGO_URI`.
 
-### Backend on Railway
+### Backend on Render
 
-1. Create a Railway project from this repository.
+1. Create a Render web service from this repository.
 2. Set the service root directory to `server`.
 3. Add environment variables from `server/.env.example`.
 4. Set `NODE_ENV=production`.
-5. Set `CLIENT_URL` to your deployed frontend URL.
-6. Deploy. Railway will use `server/railway.json` and `npm start`.
+5. Set `CLIENT_URL`, `FRONTEND_URL`, and `CORS_ORIGIN` to `https://team-task-manager-seven-rho.vercel.app`.
+6. Deploy. Render can use the root `render.yaml`, or use build command `npm install` and start command `npm start` with root directory `server`.
 
 ### Frontend on Vercel
 
@@ -140,15 +146,12 @@ See [docs/API.md](docs/API.md).
 3. Add:
 
 ```env
-VITE_API_URL=https://your-railway-backend.up.railway.app/api
-VITE_SOCKET_URL=https://your-railway-backend.up.railway.app
+VITE_API_URL=https://team-task-manager-34f2.onrender.com/api
+VITE_SOCKET_URL=https://team-task-manager-34f2.onrender.com
+VITE_ENABLE_SOCKET_IO=false
 ```
 
 4. Deploy. Vercel will use `client/vercel.json`.
-
-### Frontend on Railway
-
-Railway can also deploy the frontend as a separate service with root directory `client`, build command `npm run build`, and start command `npm run preview -- --host 0.0.0.0 --port $PORT`.
 
 ## Screenshots
 
@@ -168,4 +171,3 @@ Add production screenshots after deployment:
 - Joi validates request bodies.
 - Helmet, CORS, HPP, mongo sanitization, request size limits, and rate limiting are enabled.
 - Use strong `JWT_SECRET` and SMTP credentials in production.
-

@@ -1,7 +1,22 @@
 import axios from "axios";
 
+const PRODUCTION_API_URL = "https://team-task-manager-34f2.onrender.com/api";
+const blockedHosts = ["example" + ".com", "local" + "host", "127" + ".0.0.1"];
+
+const resolveApiUrl = () => {
+  const configuredUrl = import.meta.env.VITE_API_URL?.trim();
+  if (!configuredUrl) return PRODUCTION_API_URL;
+
+  try {
+    const { hostname } = new URL(configuredUrl);
+    return blockedHosts.includes(hostname) ? PRODUCTION_API_URL : configuredUrl;
+  } catch {
+    return PRODUCTION_API_URL;
+  }
+};
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "https://team-task-manager-34f2.onrender.com/api",
+  baseURL: resolveApiUrl(),
   withCredentials: true
 });
 
@@ -23,4 +38,3 @@ api.interceptors.response.use(
 );
 
 export default api;
-

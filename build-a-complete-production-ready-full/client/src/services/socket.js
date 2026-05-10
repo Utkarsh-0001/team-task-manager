@@ -3,7 +3,9 @@ import { io } from "socket.io-client";
 let socket;
 
 export const connectSocket = (userId) => {
-  const socketUrl = import.meta.env.VITE_SOCKET_URL || "https://team-task-manager-34f2.onrender.com";
+  if (import.meta.env.VITE_ENABLE_SOCKET_IO !== "true") return null;
+
+  const socketUrl = import.meta.env.VITE_SOCKET_URL?.trim() || "https://team-task-manager-34f2.onrender.com";
 
   if (!socket) {
     socket = io(socketUrl, {
@@ -22,4 +24,3 @@ export const getSocket = () => socket;
 export const disconnectSocket = () => {
   if (socket) socket.disconnect();
 };
-

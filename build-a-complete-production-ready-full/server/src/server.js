@@ -4,21 +4,21 @@ import { fileURLToPath } from "url";
 import { Server } from "socket.io";
 import app from "./app.js";
 import { connectDB } from "./config/db.js";
+import { getAllowedOrigins, isSocketEnabled } from "./config/env.js";
 import { initSocket } from "./services/socketService.js";
 
 const port = process.env.PORT || 5000;
-const clientUrls = (process.env.CLIENT_URL || "http://localhost:5173")
-  .split(",")
-  .map((url) => url.trim());
 const isMain = process.argv[1] === fileURLToPath(import.meta.url);
 
 const startServer = async () => {
+  await connectDB();
+
   const server = http.createServer(app);
 
-  if (process.env.ENABLE_SOCKET_IO === "true") {
+  if (isSocketEnabled()) {
     const io = new Server(server, {
       cors: {
-        origin: clientUrls,
+        origin: getAllowedOrigins(),
         credentials: true
       }
     });
@@ -29,11 +29,11 @@ const startServer = async () => {
   server.listen(port, () => console.log(`API running on port ${port}`));
 };
 
-await connectDB();
-
 if (isMain) {
-  await startServer();
+  startServer().catch((error) => {
+    console.error("Failed to start server", error);
+    process.exit(1);
+  });
 }
 
 export default app;
-
