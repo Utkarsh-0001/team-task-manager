@@ -1,73 +1,284 @@
 # Team Task Manager
 
-A production-ready full-stack task and project workspace inspired by Jira, Trello, and Asana. It includes JWT authentication, Admin/Member role-based permissions, project and task management, drag-and-drop Kanban, analytics, real-time updates, notifications, attachments, seed data, and deployment configuration.
+A full-stack MERN project management application for creating projects, managing team members, assigning tasks, and tracking delivery progress with Admin and Member roles.
+
+The application is designed like a modern SaaS productivity tool, with a responsive dashboard, Kanban task board, analytics, authentication, protected APIs, and production deployment on Vercel, Render, and MongoDB Atlas.
+
+## Live Links
+
+- Frontend: [https://team-task-manager-seven-rho.vercel.app](https://team-task-manager-seven-rho.vercel.app)
+- Backend API: [https://team-task-manager-34f2.onrender.com/api](https://team-task-manager-34f2.onrender.com/api)
+- Backend Health Check: [https://team-task-manager-34f2.onrender.com/health](https://team-task-manager-34f2.onrender.com/health)
+
+## Demo Credentials
+
+```text
+Admin
+Email: admin@teamtask.dev
+Password: Password123!
+
+Member
+Email: member@teamtask.dev
+Password: Password123!
+```
 
 ## Features
 
-- Signup, login, logout, JWT auth, protected routes, password hashing with bcrypt.
-- Admin and Member roles with route-level and API-level permissions.
-- Project CRUD with deadline, description, progress, owner, and team members.
-- Task CRUD with priority, status, due date, assignee, project reference, filtering, search, sorting, pagination, overdue highlighting, and Kanban drag-and-drop.
-- Dashboard with total projects, completed tasks, pending tasks, overdue tasks, Recharts task chart, recent activity, and member performance.
-- Dark/light mode, responsive SaaS UI, glass-style surfaces, Framer Motion animations, loading skeletons, and toast notifications.
-- Socket.io real-time task/project/notification events.
-- Email notification service via SMTP settings.
-- File attachments via multipart upload.
-- MongoDB models for User, Project, Task, Activity, and Notification.
-- Render backend config and Vercel frontend config.
+- Secure signup, login, logout, JWT authentication, and protected routes
+- Password hashing with bcrypt
+- Role-Based Access Control for Admin and Member users
+- Admin project management: create, edit, delete projects, and manage teams
+- Task management with title, description, priority, status, due date, assigned user, and project reference
+- Drag-and-drop Kanban board for Todo, In Progress, and Completed tasks
+- Task search, filtering, sorting, pagination-ready API, and overdue highlighting
+- Dashboard with total projects, completed tasks, pending tasks, overdue tasks, charts, recent activity, and member performance
+- Responsive modern UI with dark/light mode, glass-style cards, animations, loading states, and toast notifications
+- Profile page
+- Activity logs
+- File attachment support
+- Optional Socket.io real-time update support
+- Email notification service configuration
+- Production-ready CORS, rate limiting, validation, and error handling
 
 ## Tech Stack
 
-Frontend: React, Vite, Tailwind CSS, React Router, Axios, Context API, Framer Motion, Recharts, Socket.io Client, react-hot-toast, @hello-pangea/dnd.
+**Frontend**
 
-Backend: Node.js, Express, MongoDB, Mongoose, JWT, bcryptjs, Joi, Socket.io, Nodemailer, Helmet, CORS, rate limiting, mongo sanitization.
+- React.js
+- Vite
+- Tailwind CSS
+- React Router
+- Axios
+- Context API
+- Framer Motion
+- Recharts
+- React Hot Toast
+- @hello-pangea/dnd
+- Socket.io Client
+
+**Backend**
+
+- Node.js
+- Express.js
+- MongoDB Atlas
+- Mongoose
+- JWT
+- bcryptjs
+- Joi validation
+- Helmet
+- CORS
+- express-rate-limit
+- Nodemailer
+- Socket.io
+- Multer
+
+**Deployment**
+
+- Frontend: Vercel
+- Backend: Render
+- Database: MongoDB Atlas
 
 ## Project Structure
 
 ```text
-client/
-  src/
-    components/
-    context/
-    hooks/
-    pages/
-    services/
-    utils/
-server/
-  src/
-    config/
-    controllers/
-    middleware/
-    models/
-    routes/
-    seed/
-    services/
-    utils/
-docs/
+team-task-manager/
+  client/
+    src/
+      components/
+      context/
+      hooks/
+      pages/
+      services/
+      utils/
+    vercel.json
+
+  server/
+    src/
+      config/
+      controllers/
+      middleware/
+      models/
+      routes/
+      seed/
+      services/
+      utils/
+
+  docs/
+    API.md
+
+  render.yaml
+  README.md
 ```
 
-## Local Setup
+## Screenshots
 
-1. Install dependencies:
+Add screenshots in this section after capturing the deployed application.
+
+| Page | Preview |
+| --- | --- |
+| Landing Page | `screenshots/landing.png` |
+| Login Page | `screenshots/login.png` |
+| Dashboard | `screenshots/dashboard.png` |
+| Projects | `screenshots/projects.png` |
+| Kanban Board | `screenshots/kanban.png` |
+| Tasks | `screenshots/tasks.png` |
+| Profile | `screenshots/profile.png` |
+
+## Installation
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Utkarsh-0001/team-task-manager.git
+cd team-task-manager
+```
+
+### 2. Install dependencies
 
 ```bash
 npm run install:all
 ```
 
-2. Create environment files:
+Or install separately:
 
 ```bash
-cp server/.env.example server/.env
-cp client/.env.example client/.env
+cd server
+npm install
+
+cd ../client
+npm install
 ```
 
-3. Set `server/.env`:
+### 3. Configure backend environment
+
+Create `server/.env`:
 
 ```env
 NODE_ENV=development
 PORT=5000
-MONGO_URI=mongodb+srv://<user>:<password>@<cluster>.mongodb.net/team-task-manager
-JWT_SECRET=replace-with-a-long-random-secret
+MONGO_URI=your_mongodb_atlas_connection_string
+JWT_SECRET=your_long_random_jwt_secret
+JWT_EXPIRES_IN=7d
+CLIENT_URL=http://localhost:5173
+FRONTEND_URL=http://localhost:5173
+CORS_ORIGIN=http://localhost:5173
+COOKIE_SAME_SITE=lax
+COOKIE_SECURE=false
+ENABLE_SOCKET_IO=false
+SMTP_HOST=
+SMTP_PORT=587
+SMTP_USER=
+SMTP_PASS=
+SMTP_FROM="Team Task Manager <no-reply@teamtaskmanager.app>"
+```
+
+### 4. Configure frontend environment
+
+Create `client/.env`:
+
+```env
+VITE_API_URL=http://localhost:5000/api
+VITE_SOCKET_URL=http://localhost:5000
+VITE_ENABLE_SOCKET_IO=false
+```
+
+### 5. Seed demo data
+
+```bash
+npm run seed
+```
+
+### 6. Start development servers
+
+```bash
+npm run dev
+```
+
+Frontend runs on the Vite dev URL. Backend runs on the configured `PORT`.
+
+## Available Scripts
+
+Root:
+
+```bash
+npm run install:all
+npm run dev
+npm run build
+npm run seed
+```
+
+Server:
+
+```bash
+npm run dev
+npm start
+npm run seed
+```
+
+Client:
+
+```bash
+npm run dev
+npm run build
+npm run preview
+```
+
+## API Overview
+
+Full API documentation is available in [docs/API.md](docs/API.md).
+
+Main endpoints:
+
+```text
+POST   /api/auth/signup
+POST   /api/auth/login
+POST   /api/auth/logout
+GET    /api/auth/me
+
+GET    /api/projects
+POST   /api/projects
+GET    /api/projects/:id
+PUT    /api/projects/:id
+DELETE /api/projects/:id
+
+GET    /api/tasks
+POST   /api/tasks
+PUT    /api/tasks/:id
+DELETE /api/tasks/:id
+POST   /api/tasks/:id/attachments
+
+GET    /api/dashboard
+```
+
+## Deployment
+
+### MongoDB Atlas
+
+1. Create a MongoDB Atlas cluster.
+2. Create a database user.
+3. Add the required network access rule.
+4. Copy the connection string.
+5. Add it as `MONGO_URI` in Render.
+
+### Backend Deployment on Render
+
+Render can use the included `render.yaml`.
+
+Manual Render settings:
+
+```text
+Root Directory: server
+Build Command: npm install
+Start Command: npm start
+Health Check Path: /health
+```
+
+Required Render environment variables:
+
+```env
+NODE_ENV=production
+MONGO_URI=your_mongodb_atlas_connection_string
+JWT_SECRET=your_long_random_jwt_secret
 JWT_EXPIRES_IN=7d
 CLIENT_URL=https://team-task-manager-seven-rho.vercel.app
 FRONTEND_URL=https://team-task-manager-seven-rho.vercel.app
@@ -75,10 +286,22 @@ CORS_ORIGIN=https://team-task-manager-seven-rho.vercel.app
 COOKIE_SAME_SITE=none
 COOKIE_SECURE=true
 ENABLE_SOCKET_IO=false
-COOKIE_SECURE=false
 ```
 
-4. Set `client/.env`:
+### Frontend Deployment on Vercel
+
+The frontend uses `client/vercel.json`.
+
+Vercel settings:
+
+```text
+Root Directory: client
+Build Command: npm run build
+Output Directory: dist
+Framework: Vite
+```
+
+Required Vercel environment variables:
 
 ```env
 VITE_API_URL=https://team-task-manager-34f2.onrender.com/api
@@ -86,88 +309,28 @@ VITE_SOCKET_URL=https://team-task-manager-34f2.onrender.com
 VITE_ENABLE_SOCKET_IO=false
 ```
 
-5. Seed demo data:
+## Database Models
 
-```bash
-npm run seed
-```
+- User: name, email, password, role, avatar, title, projects
+- Project: name, description, deadline, owner, team members, progress, color
+- Task: title, description, priority, status, due date, assigned user, project, attachments
+- Activity: actor, action, entity type, entity id, project
+- Notification: recipient, title, message, type, read status, link
 
-6. Start both apps:
+## Security
 
-```bash
-npm run dev
-```
+- Password hashing with bcrypt
+- JWT-based authentication
+- HTTP-only auth cookie support
+- Bearer token support
+- Role-based authorization middleware
+- Joi request validation
+- Helmet security headers
+- CORS origin allowlist
+- Rate limiting
+- Mongo query sanitization
+- Centralized error handling
 
-Frontend dev URL is printed by Vite after startup.  
-Backend health endpoint is `/health` on the configured API host.
+## Author
 
-## Demo Credentials
-
-Admin:
-
-```text
-admin@teamtask.dev
-Password123!
-```
-
-Member:
-
-```text
-member@teamtask.dev
-Password123!
-```
-
-## API Documentation
-
-See [docs/API.md](docs/API.md).
-
-## Deployment
-
-### MongoDB Atlas
-
-1. Create an Atlas cluster.
-2. Create a database user.
-3. Allow Render outbound access. For quick demos, Atlas can allow broad network access; for production, restrict network access where possible.
-4. Copy the connection string into `MONGO_URI`.
-
-### Backend on Render
-
-1. Create a Render web service from this repository.
-2. Set the service root directory to `server`.
-3. Add environment variables from `server/.env.example`.
-4. Set `NODE_ENV=production`.
-5. Set `CLIENT_URL`, `FRONTEND_URL`, and `CORS_ORIGIN` to `https://team-task-manager-seven-rho.vercel.app`.
-6. Deploy. Render can use the root `render.yaml`, or use build command `npm install` and start command `npm start` with root directory `server`.
-
-### Frontend on Vercel
-
-1. Import the repository in Vercel.
-2. Set the root directory to `client`.
-3. Add:
-
-```env
-VITE_API_URL=https://team-task-manager-34f2.onrender.com/api
-VITE_SOCKET_URL=https://team-task-manager-34f2.onrender.com
-VITE_ENABLE_SOCKET_IO=false
-```
-
-4. Deploy. Vercel will use `client/vercel.json`.
-
-## Screenshots
-
-Add production screenshots after deployment:
-
-- Landing page
-- Dashboard analytics
-- Project Kanban board
-- Mobile navigation
-
-## Security Notes
-
-- Passwords are hashed using bcrypt.
-- JWTs are accepted via bearer token and HTTP-only cookie.
-- Protected APIs use auth middleware.
-- Admin-only actions use RBAC middleware.
-- Joi validates request bodies.
-- Helmet, CORS, HPP, mongo sanitization, request size limits, and rate limiting are enabled.
-- Use strong `JWT_SECRET` and SMTP credentials in production.
+Built by [Utkarsh](https://github.com/Utkarsh-0001).
